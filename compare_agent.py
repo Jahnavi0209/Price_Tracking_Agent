@@ -2,25 +2,20 @@ from typing import Tuple, Optional
 from amazon_agent import amazon_price
 from flipkart_agent import flipkart_price
 
-def compare_prices(amazon_url: str, flipkart_url: str) -> Tuple[str, Optional[int], dict, dict]:
-    """
-    Return (decision, best_price, amazon_result, flipkart_result)
-    decision ∈ {"amazon", "flipkart", "tie", "unknown"}
-    """
-    a = amazon_price(amazon_url)
-    f = flipkart_price(flipkart_url)
+def compare_prices(goal):
+    prices={}
+    if goal["amazon_url"]:
+        price=amazon_price(goal["amazon_url"])
+        if price:
+            prices["amazon"]=price
+    if goal["flipkart_url"]:
+        price=flipkart_price(goal["flipkart_url"])
+        if price:
+            prices["flipkart"]=price
+    if not prices:
+        return None,{}
 
-    if a["ok"] and f["ok"]:
-        if a["price"] < f["price"]:
-            return ("amazon", a["price"], a, f)
-        elif f["price"] < a["price"]:
-            return ("flipkart", f["price"], a, f)
-        else:
-            return ("tie", a["price"], a, f)
-
-    if a["ok"]:
-        return ("amazon", a["price"], a, f)
-    if f["ok"]:
-        return ("flipkart", f["price"], a, f)
-
-    return ("unknown", None, a, f)
+    best_site=min(prices)
+    best_price=prices[best_site]
+    return (best_site,best_price),prices
+    

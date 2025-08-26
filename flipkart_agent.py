@@ -13,9 +13,6 @@ def flipkart_price(url):
     price=soup.find("div",{"class":"Nx9bqj CxhGGd"})
     
     if price:
-        return {
-            "ok": True,
-            "price":clean_price(price.text)
-            }
-    return {"ok":False}
+        return clean_price(price.text)
+    return None
 

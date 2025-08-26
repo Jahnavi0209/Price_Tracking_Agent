@@ -15,9 +15,7 @@ def amazon_price(url):
 
     if price:
         #  return clean_price(price.text)
-        return {
-            "ok": True,
-            "price":clean_price(price.text)
-        }
-    return {"ok":False}
+        return clean_price(price.text)
+        
+    return None
 
